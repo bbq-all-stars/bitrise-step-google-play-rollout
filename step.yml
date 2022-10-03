@@ -56,9 +56,11 @@ type_tags:
 #
 deps:
   brew:
-  - name: asdf
+  - name: curl
+  - name: git
   apt_get:
-  - name: asdf
+  - name: curl
+  - name: git
 
 
 toolkit:
@@ -67,17 +69,79 @@ toolkit:
 
 
 inputs:
-  - example_step_input: Default Value - you can leave this empty if you want to
+  - account_id:
     opts:
-      title: "Example Step Input"
-      summary: Summary. No more than 2-3 sentences.
+      title: Google Developer account ID
+      summary: Google Play Developer Account ID
       description: |
-        Description of this input.
-
-        Can be Markdown formatted text.
-      is_expand: true
+        input Google Play Developer account ID for you want to deploy
       is_required: true
-      value_options: []
+  - app_id:
+    opts:
+      title: App ID (number)
+      summary: App ID (number)
+      description: |
+        input app ID for you want to deploy
+      is_required: true
+  - track_name:
+    opts:
+      title: Track name
+      summary: track name
+      description: |
+        input track name for you want to deploy
+      is_required: true
+      value_options:
+        - "open-testing"
+        - "closed-testing"
+        - "internal-testing"
+  - user_email:
+    opts:
+      title: User email
+      summary: User email
+      description: |
+        input deploy user email
+      is_required: true
+  - password:
+    opts:
+      title: User password
+      summary: User password
+      description: |
+        input deploy user password
+      is_required: true
+      is_sensitive: true
+  - ignore_warn: "no"
+    opts:
+      title: Ignore warn
+      summary:  Ignore warn
+      description: |
+        If you want to ignore warnings, set "yes"
+      value_options:
+        - "yes"
+        - "no"
+  - screenshot_review: "yes"
+    opts:
+      title: Take release review screenshot
+      summary: Take release review screenshot
+      description: |
+        If you want to take a screenshot of release review screen, set "yes"
+      value_options:
+        - "yes"
+        - "no"
+  - screenshot_dir: "."
+    opts:
+      title: Screenshot dir
+      summary:  Screenshot dir
+      description: |
+        Screenshot dir
+  - debug: "no"
+    opts:
+      title: debug mode
+      summary: debug mode
+      description: |
+        Launch puppeteer without headless mode
+      value_options:
+        - "yes"
+        - "no"
 
 outputs:
   - EXAMPLE_STEP_OUTPUT:

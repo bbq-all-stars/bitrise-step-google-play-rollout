@@ -1,26 +1,37 @@
 #!/bin/bash
 set -ex
 
-echo "This is the value specified for the input 'example_step_input': ${example_step_input}"
+if [ ! -d "~/.asdf" ]; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
+  . $HOME/.asdf/asdf.sh
+  asdf plugin add nodejs
+  asdf install nodejs
+fi
 
-#
-# --- Export Environment Variables for other Steps:
-# You can export Environment Variables for other Steps with
-#  envman, which is automatically installed by `bitrise setup`.
-# A very simple example:
-envman add --key EXAMPLE_STEP_OUTPUT --value 'the value you want to share'
-# Envman can handle piped inputs, which is useful if the text you want to
-# share is complex and you don't want to deal with proper bash escaping:
-#  cat file_with_complex_input | envman add --KEY EXAMPLE_STEP_OUTPUT
-# You can find more usage examples on envman's GitHub page
-#  at: https://github.com/bitrise-io/envman
+npm install
 
-#
-# --- Exit codes:
-# The exit code of your Step is very important. If you return
-#  with a 0 exit code `bitrise` will register your Step as "successful".
-# Any non zero exit code will be registered as "failed" by `bitrise`.
+IGNORE_WARN_OPTION=""
+if [ "${ignore_warn}" = "yes" ]; then
+  IGNORE_WARN_OPTION="-w"
+fi
 
+SCREENSHOT_REVIEW=""
+if [ "${screenshot_review}" = "yes" ]; then
+  SCREENSHOT_REVIEW="-s"
+fi
 
-# TODO: setup asdf with nodejs
-# TODO: exec node src/main.js
+DEBUG=""
+if [ "${debug}" = "yes" ]; then
+  DEBUG="-D"
+fi
+
+node ./src/main.js \
+  -i "${developer_account_id}" \
+  -a "${app_id}" \
+  -t "${track_name}" \
+  -e "${user_email}" \
+  -p "${password}" \
+  ${IGNORE_WARN_OPTION} \
+  ${SCREENSHOT_REVIEW} \
+  -d "${screenshot_dir}" \
+  ${DEBUG}
