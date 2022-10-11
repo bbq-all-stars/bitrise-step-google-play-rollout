@@ -10,6 +10,8 @@ app:
   - USER_EMAIL: $USER_EMAIL
   - PASSWORD: $PASSWORD
   - IGNORE_WARN: $IGNORE_WARN
+  - SCREENSHOT_REVIEW: $SCREENSHOT_REVIEW
+  - DEBUG: $DEBUG
 
   # If you want to share this step into a StepLib
   - BITRISE_STEP_ID: google-play-rollout
@@ -52,6 +54,8 @@ workflows:
           - user_email: $USER_EMAIL
           - password: $PASSWORD
           - ignore_warn: $IGNORE_WARN
+          - screenshot_review: $SCREENSHOT_REVIEW
+          - debug: $DEBUG
     - script:
         inputs:
         - content: |
