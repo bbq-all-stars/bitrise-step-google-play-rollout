@@ -38,7 +38,9 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
         screenshotDir: options.screenshotDir,
     });
     await deployer.login(options.email, options.password);
-    await deployer.rollout();
+    const screenshotFilePath = await deployer.rollout();
+
+    console.log(screenshotFilePath)
 
     await browser.close();
 })();
@@ -106,7 +108,7 @@ class Deployer {
             await Deployer.delay(1000);
         })();
 
-        await (async () => {
+        const screenshotFilePath = await (async () => {
             await Deployer.delay(1000);
 
             const isError = await this.page.evaluate(function() {
@@ -136,6 +138,7 @@ class Deployer {
                     throw new Error('warning exists')
                 }
             }
+            let filePath = ""
             if (this.options.screenshotReview){
                 const expansionButtons = await this.page.$$('.expansion-button')
                 for (const expansionButton of expansionButtons){
@@ -150,7 +153,7 @@ class Deployer {
                 const H = today.getHours().toString().padStart(2, "0");
                 const M = today.getMinutes().toString().padStart(2, "0");
                 const S = today.getSeconds().toString().padStart(2, "0");
-                let filePath = y+m+d+H+M+S+'_review.png';
+                filePath = y+m+d+H+M+S+'_review.png';
                 if (this.options.screenshotDir){
                     filePath = this.options.screenshotDir + '/' + filePath
                 }
@@ -181,6 +184,8 @@ class Deployer {
 
             await this.page.waitForNavigation({ waitUntil: 'networkidle0' });
             await Deployer.delay(1000);
+
+            return filePath
         })();
 
         await (async () => {
@@ -191,6 +196,8 @@ class Deployer {
                 return buttonContent === 'Create new release';
             }, {}, selector);
         })();
+
+        return screenshotFilePath
     }
 
     // NOTE: https://stackoverflow.com/a/46965281

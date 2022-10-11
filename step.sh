@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 if [ ! -d "~/.asdf" ]; then
   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
@@ -25,7 +25,9 @@ if [ "${debug}" = "yes" ]; then
   DEBUG="-D"
 fi
 
-node ./src/main.js \
+SCREENSHOT_DIR="${project_location}/google_play_rollout"
+
+GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   -i "${developer_account_id}" \
   -a "${app_id}" \
   -t "${track_name}" \
@@ -33,5 +35,5 @@ node ./src/main.js \
   -p "${password}" \
   ${IGNORE_WARN_OPTION} \
   ${SCREENSHOT_REVIEW} \
-  -d "${screenshot_dir}" \
-  ${DEBUG}
+  -d "${SCREENSHOT_DIR}" \
+  ${DEBUG})

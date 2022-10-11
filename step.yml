@@ -13,9 +13,9 @@ summary: |
   The step make your android app rollout through puppeteer.
 description: |
   The step make your android app rollout through puppeteer.
-website: https://github.com/xflagstudio/bitrise-step-google-play-rollout
-source_code_url: https://github.com/xflagstudio/bitrise-step-google-play-rollout
-support_url: https://github.com/xflagstudio/bitrise-step-google-play-rollout/issues
+website: https://github.com/bbq-all-stars/bitrise-step-google-play-rollout
+source_code_url: https://github.com/bbq-all-stars/bitrise-step-google-play-rollout
+support_url: https://github.com/bbq-all-stars/bitrise-step-google-play-rollout/issues
 
 # If this step should be available only for certain project types
 # just uncomment this `project_type_tags` section and include all the
@@ -69,6 +69,11 @@ toolkit:
 
 
 inputs:
+  - project_location: $BITRISE_SOURCE_DIR
+    opts:
+      title: Project Location
+      summary: The root dir of your project.
+      description: The root dir of your project.
   - account_id:
     opts:
       title: Google Developer account ID
@@ -127,12 +132,6 @@ inputs:
       value_options:
         - "yes"
         - "no"
-  - screenshot_dir: "."
-    opts:
-      title: Screenshot dir
-      summary:  Screenshot dir
-      description: |
-        Screenshot dir
   - debug: "no"
     opts:
       title: debug mode
@@ -144,11 +143,9 @@ inputs:
         - "no"
 
 outputs:
-  - EXAMPLE_STEP_OUTPUT:
+  - GOOGLE_PLAY_SCREENSHOT_PATH:
     opts:
-      title: "Example Step Output"
-      summary: Summary. No more than 2-3 sentences.
+      title: "Path of screenshot on review page"
+      summary: Path of screenshot on review page
       description: |
-        Description of this output.
-
-        Can be Markdown formatted text.
+        Path of screenshot on review page
