@@ -26,6 +26,9 @@ if [ "${debug}" = "yes" ]; then
 fi
 
 SCREENSHOT_DIR="${project_location}/google_play_rollout"
+if [ ! -d "$SCREENSHOT_DIR" ]; then
+  mkdir "$SCREENSHOT_DIR"
+fi
 
 GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   -i "${developer_account_id}" \
