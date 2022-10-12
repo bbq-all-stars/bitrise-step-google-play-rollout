@@ -33,7 +33,7 @@ if [ ! -d "$SCREENSHOT_DIR" ]; then
 fi
 
 GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
-  -i "${developer_account_id}" \
+  -i "${account_id}" \
   -a "${app_id}" \
   -t "${track_name}" \
   -e "${user_email}" \
