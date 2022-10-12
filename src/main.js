@@ -14,7 +14,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
         .option('-p, --password <char>', 'Deploy user password of Google account')
         .option('-w, --ignore-warn', 'Ignore warning')
         .option('-s, --screenshot-review', 'Take review screenshot')
-        .option('-d, --screenshot-dir', 'Screenshot dir')
+        .option('-d, --screenshot-dir <char>', 'Screenshot dir')
         .option('-D, --debug', 'Debug mode');
     cmd.program.parse();
 
@@ -64,7 +64,7 @@ class Deployer {
                 await Deployer.delay(1000);
                 badInput = await this.page.evaluate(() => document.querySelector('#identifierId[aria-invalid="true"]') !== null);
                 if (badInput) {
-                    console.log('Incorrect email or phone. Please try again.');
+                    console.error('Incorrect email or phone. Please try again.');
                     await this.page.click('#identifierId', {clickCount: 3});
                 }
             }
@@ -138,7 +138,7 @@ class Deployer {
                     throw new Error('warning exists')
                 }
             }
-            let filePath = ""
+            let filePath = ''
             if (this.options.screenshotReview){
                 const expansionButtons = await this.page.$$('.expansion-button')
                 for (const expansionButton of expansionButtons){
