@@ -69,11 +69,6 @@ toolkit:
 
 
 inputs:
-  - project_location: $BITRISE_SOURCE_DIR
-    opts:
-      title: Project Location
-      summary: The root dir of your project.
-      description: The root dir of your project.
   - account_id:
     opts:
       title: Google Developer account ID

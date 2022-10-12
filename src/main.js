@@ -53,10 +53,10 @@ class Deployer {
 
     // NOTE: Reference https://gist.github.com/Brandawg93/728a93e84ed7b66d8dd0af966cb20ecb#file-google_login-ts-L80
     async login(email, password){
-        await this.page.waitForSelector('#identifierId');
-        let badInput = true;
-
         await (async () => {
+            await this.page.waitForSelector('#identifierId');
+            let badInput = true;
+
             while (badInput) {
                 await this.page.type('#identifierId', email);
                 await Deployer.delay(1000);

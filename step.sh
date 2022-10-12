@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
 
-if [ ! -d "~/.asdf" ]; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
-  . $HOME/.asdf/asdf.sh
+if [ -d ".asdf" ]; then
+  git clone https://github.com/asdf-vm/asdf.git .asdf --branch v0.10.2
+  . .asdf/asdf.sh
   asdf plugin add nodejs
   asdf install nodejs
 fi
+
+cd $BITRISE_SOURCE_DIR
 
 npm install
 
@@ -25,7 +27,7 @@ if [ "${debug}" = "yes" ]; then
   DEBUG="-D"
 fi
 
-SCREENSHOT_DIR="${project_location}/google_play_rollout"
+SCREENSHOT_DIR="${PWD}/google_play_rollout"
 if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
 fi
