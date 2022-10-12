@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 if [ -d ".asdf" ]; then
   git clone https://github.com/asdf-vm/asdf.git .asdf --branch v0.10.2
@@ -13,17 +13,17 @@ cd $BITRISE_SOURCE_DIR
 npm install
 
 IGNORE_WARN_OPTION=""
-if [ "${ignore_warn}" = "yes" ]; then
+if "${ignore_warn}"; then
   IGNORE_WARN_OPTION="-w"
 fi
 
 SCREENSHOT_REVIEW=""
-if [ "${screenshot_review}" = "yes" ]; then
+if "${screenshot_review}"; then
   SCREENSHOT_REVIEW="-s"
 fi
 
 DEBUG=""
-if [ "${debug}" = "yes" ]; then
+if "${debug}"; then
   DEBUG="-D"
 fi
 
