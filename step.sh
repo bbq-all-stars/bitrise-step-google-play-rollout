@@ -8,8 +8,6 @@ if [ -d ".asdf" ]; then
   asdf install nodejs
 fi
 
-cd $BITRISE_SOURCE_DIR
-
 npm install
 
 IGNORE_WARN_OPTION=""
