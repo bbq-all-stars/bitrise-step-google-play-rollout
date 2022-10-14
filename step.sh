@@ -1,7 +1,10 @@
 #!/bin/bash
 set -ex
 
-THIS_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SOURCE_DIR=$(pwd)
+STEP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $STEP_DIR
 
 if [ -d ".asdf" ]; then
   git clone https://github.com/asdf-vm/asdf.git .asdf --branch v0.10.2
@@ -10,7 +13,7 @@ if [ -d ".asdf" ]; then
   asdf install nodejs
 fi
 
-npm install "${THIS_SCRIPT_DIR}"
+npm install
 
 IGNORE_WARN_OPTION=""
 if [ "${ignore_warn}" = "yes" ]; then
@@ -32,7 +35,7 @@ if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
 fi
 
-GOOGLE_PLAY_SCREENSHOT_PATH=$(node ${THIS_SCRIPT_DIR}/src/main.js \
+GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   -i "${account_id}" \
   -a "${app_id}" \
   -t "${track_name}" \
@@ -42,3 +45,5 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ${THIS_SCRIPT_DIR}/src/main.js \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
   ${DEBUG})
+
+cd $SOURCE_DIR
