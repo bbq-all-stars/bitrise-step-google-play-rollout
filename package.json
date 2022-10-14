@@ -1,4 +1,5 @@
 {
+  "name": "bitrise-step-google-play-rollout",
   "dependencies": {
     "commander": "^9.4.1",
     "puppeteer": "^18.0.5",
