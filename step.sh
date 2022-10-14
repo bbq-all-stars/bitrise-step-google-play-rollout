@@ -13,17 +13,17 @@ cd $BITRISE_SOURCE_DIR
 npm install
 
 IGNORE_WARN_OPTION=""
-if "${ignore_warn}"; then
+if [ "${ignore_warn}" = "yes" ]; then
   IGNORE_WARN_OPTION="-w"
 fi
 
 SCREENSHOT_REVIEW=""
-if "${screenshot_review}"; then
+if [ "${screenshot_review}" = "yes" ]; then
   SCREENSHOT_REVIEW="-s"
 fi
 
 DEBUG=""
-if "${debug}"; then
+if [ "${debug}" = "yes" ]; then
   DEBUG="-D"
 fi
 
