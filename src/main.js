@@ -53,7 +53,7 @@ class Deployer {
 
     // NOTE: Reference https://gist.github.com/Brandawg93/728a93e84ed7b66d8dd0af966cb20ecb#file-google_login-ts-L80
     async login(email, password){
-        await (async () => {
+        {
             await this.page.waitForSelector('#identifierId');
             let badInput = true;
 
@@ -68,21 +68,22 @@ class Deployer {
                     await this.page.click('#identifierId', {clickCount: 3});
                 }
             }
-        })();
 
-        await (async () => {
+        }
+
+        {
             await this.page.waitForSelector('#password')
             await Deployer.delay(1000);
             await this.page.type('input[type="password"]', password);
             await Deployer.delay(1000);
             await this.page.keyboard.press('Enter');
-            await this.page.waitForNavigation({ waitUntil: 'networkidle0' });
+            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
-        })();
+        }
     }
 
     async rollout(){
-        await (async () => {
+        {
             const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -91,11 +92,11 @@ class Deployer {
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
-            await this.page.waitForNavigation({ waitUntil: 'networkidle0' });
+            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
-        })();
+        }
 
-        await (async () => {
+        {
             const selector = 'app-releases-prepare-page form-bottom-bar material-button[debug-id="review-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -104,14 +105,15 @@ class Deployer {
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
-            await this.page.waitForNavigation({ waitUntil: 'networkidle0' });
+            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
-        })();
+        }
 
-        const screenshotFilePath = await (async () => {
+        let screenshotFilePath = "";
+        {
             await Deployer.delay(1000);
 
-            const isError = await this.page.evaluate(function() {
+            const isError = await this.page.evaluate(function () {
                 const errorSelector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text strong';
                 const errorElement = document.querySelectorAll(errorSelector)
                 if (!errorElement.length) {
@@ -120,41 +122,41 @@ class Deployer {
                 const errorContent = errorElement[0].textContent;
                 return /Errors?$/.test(errorContent);
             })
-            if (isError){
+            if (isError) {
                 throw new Error('error exists')
             }
 
-            if (!this.options.ignoreWarn){
-                const isWarning = await this.page.evaluate(function() {
+            if (!this.options.ignoreWarn) {
+                const isWarning = await this.page.evaluate(function () {
                     const warningSelector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text strong';
                     const warningElement = document.querySelectorAll(warningSelector)
-                    if (!warningElement.length){
+                    if (!warningElement.length) {
                         return false
                     }
                     const warningContent = warningElement[0].textContent;
                     return /Warnings?$/.test(warningContent);
                 })
-                if (isWarning){
+                if (isWarning) {
                     throw new Error('warning exists')
                 }
             }
             let filePath = ''
-            if (this.options.screenshotReview){
+            if (this.options.screenshotReview) {
                 const expansionButtons = await this.page.$$('.expansion-button')
-                for (const expansionButton of expansionButtons){
+                for (const expansionButton of expansionButtons) {
                     await expansionButton.click()
                     await Deployer.delay(1000);
                 }
 
                 const today = new Date();
                 const y = today.getFullYear().toString();
-                const m = (today.getMonth()+1).toString().padStart(2, "0");
+                const m = (today.getMonth() + 1).toString().padStart(2, "0");
                 const d = today.getDate().toString().padStart(2, "0");
                 const H = today.getHours().toString().padStart(2, "0");
                 const M = today.getMinutes().toString().padStart(2, "0");
                 const S = today.getSeconds().toString().padStart(2, "0");
-                filePath = y+m+d+H+M+S+'_review.png';
-                if (this.options.screenshotDir){
+                filePath = y + m + d + H + M + S + '_review.png';
+                if (this.options.screenshotDir) {
                     filePath = this.options.screenshotDir + '/' + filePath
                 }
                 await this.page.screenshot({
@@ -182,20 +184,20 @@ class Deployer {
             await Deployer.delay(1000);
             await this.page.click(rolloutButtonSelector);
 
-            await this.page.waitForNavigation({ waitUntil: 'networkidle0' });
+            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
 
-            return filePath
-        })();
+            screenshotFilePath = filePath
+        }
 
-        await (async () => {
+        {
             const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
                 const buttonContent = button.querySelector('div.button-content').textContent;
                 return buttonContent === 'Create new release';
             }, {}, selector);
-        })();
+        }
 
         return screenshotFilePath
     }
