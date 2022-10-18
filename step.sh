@@ -30,7 +30,7 @@ if [ "${debug}" = "yes" ]; then
   DEBUG="-D"
 fi
 
-SCREENSHOT_DIR="${PWD}/google_play_rollout"
+SCREENSHOT_DIR="/tmp/google_play_rollout"
 if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
 fi
@@ -46,5 +46,7 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   -d "${SCREENSHOT_DIR}" \
   -S "${two_step_verification_secret}" \
   ${DEBUG})
+
+envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"
 
 cd $SOURCE_DIR
