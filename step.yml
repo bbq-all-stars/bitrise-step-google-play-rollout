@@ -109,6 +109,13 @@ inputs:
         input deploy user password
       is_required: true
       is_sensitive: true
+  - two_step_verification_secret:
+    opts:
+      title: Two step verification secret
+      summary: Two step verification secret
+      description: |
+        input Googole two step verification secret
+      is_sensitive: true
   - ignore_warn: "no"
     opts:
       title: Ignore warn

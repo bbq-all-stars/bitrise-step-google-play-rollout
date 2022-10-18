@@ -44,6 +44,7 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   ${IGNORE_WARN_OPTION} \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
+  -S "${two_step_verification_secret}" \
   ${DEBUG})
 
 cd $SOURCE_DIR

@@ -1,7 +1,7 @@
 const cmd = require('commander');
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
-
+const totp = require("totp-generator");
 
 (async () => {
     puppeteer.use(pluginStealth());
@@ -15,7 +15,8 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
         .option('-w, --ignore-warn', 'Ignore warning')
         .option('-s, --screenshot-review', 'Take review screenshot')
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
-        .option('-D, --debug', 'Debug mode');
+        .option('-D, --debug', 'Debug mode')
+        .option('-S, --two-step-verification-secret <char>', 'Two step verification secret');
     cmd.program.parse();
 
     const options = cmd.program.opts();
@@ -36,6 +37,7 @@ const pluginStealth = require('puppeteer-extra-plugin-stealth');
         ignoreWarn : options.ignoreWarn,
         screenshotReview: options.screenshotReview,
         screenshotDir: options.screenshotDir,
+        secret: options.twoStepVerificationSecret
     });
     await deployer.login(options.email, options.password);
     const screenshotFilePath = await deployer.rollout();
@@ -72,14 +74,24 @@ class Deployer {
         }
 
         {
-            await this.page.waitForSelector('#password')
+            await this.page.waitForSelector('#password');
             await Deployer.delay(1000);
             await this.page.type('input[type="password"]', password);
             await Deployer.delay(1000);
             await this.page.keyboard.press('Enter');
-            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
-            await Deployer.delay(1000);
         }
+
+        if (this.options.secret){
+            await this.page.waitForSelector('#totpPin');
+            await Deployer.delay(1000);
+            const token = totp(this.options.secret);
+            await this.page.type('input[type="tel"]', token);
+            await Deployer.delay(200);
+            await this.page.keyboard.press('Enter');
+        }
+
+        await this.page.waitForNavigation({waitUntil: 'networkidle0'});
+        await Deployer.delay(1000);
     }
 
     async rollout(){
