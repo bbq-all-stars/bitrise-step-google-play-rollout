@@ -1,8 +1,12 @@
 # Google Play Rollout
 
-The step make your android app rollout through puppeteer.
+The step make your android app rollout using Puppeteer.
 
-**THIS STEP IS UNDER DEVELOPMENT. IT IS NOT YET ABLE TO WORK CORRECTLY.**
+Before executing this step, create a release using [Google Play Deploy step](https://github.com/bitrise-steplib/steps-google-play-deploy).
+This step rollout the created release using Puppeteer.
+
+The reason for using Puppeteer instead of Google Play Console API for rollout is that draft app does not support Google Play Console API for rollout.
+ref. https://github.com/fastlane/fastlane/discussions/18293
 
 ## How to use this Step
 
