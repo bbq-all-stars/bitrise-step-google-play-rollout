@@ -134,15 +134,6 @@ inputs:
       value_options:
         - "yes"
         - "no"
-  - debug: "no"
-    opts:
-      title: debug mode
-      summary: debug mode
-      description: |
-        Launch puppeteer without headless mode
-      value_options:
-        - "yes"
-        - "no"
 
 outputs:
   - GOOGLE_PLAY_SCREENSHOT_PATH:

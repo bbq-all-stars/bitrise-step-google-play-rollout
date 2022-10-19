@@ -25,11 +25,6 @@ if [ "${screenshot_review}" = "yes" ]; then
   SCREENSHOT_REVIEW="-s"
 fi
 
-DEBUG=""
-if [ "${debug}" = "yes" ]; then
-  DEBUG="-D"
-fi
-
 SCREENSHOT_DIR="/tmp/google_play_rollout"
 if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
@@ -44,8 +39,7 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   ${IGNORE_WARN_OPTION} \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
-  -S "${totp_secret}" \
-  ${DEBUG})
+  -S "${totp_secret}")
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"
 

@@ -15,7 +15,6 @@ const totp = require("totp-generator");
         .option('-w, --ignore-warn', 'Ignore warning')
         .option('-s, --screenshot-review', 'Take review screenshot')
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
-        .option('-D, --debug', 'Debug mode')
         .option('-S, --totp-secret <char>', 'Two step verification secret');
     cmd.program.parse();
 
@@ -23,10 +22,8 @@ const totp = require("totp-generator");
     const url = 'https://play.google.com/console/u/0/developers/' + options.id + '/app/' + options.app + '/tracks/' + options.track;
 
     const puppeteerOptions = {
-        headless : true,
-    }
-    if (options.debug) {
-        puppeteerOptions.headless = false;
+        // NOTE: Can't log in to Google on headless mode.
+        headless : false,
     }
 
     const browser = await puppeteer.launch(puppeteerOptions);
