@@ -8,6 +8,15 @@ This step rollout the created release using Puppeteer.
 The reason for using Puppeteer instead of Google Play Console API for rollout is that draft app does not support Google Play Console API for rollout.
 ref. https://github.com/fastlane/fastlane/discussions/18293
 
+This step has some functions:
+* Log in Google account with two step verification.
+* Access Google Play Console page and rollout an app using puppeteer.
+* If some warnings show on "release review" page, the step cancel rollout.
+    * You can be enable of "Ignore warining" option.
+* Take screenshot of "release review" page.
+    * You can change an screenshot size.
+* You can choose a rollout track from "Open testing", "Closed testing" or "Internal testing".
+
 ## How to use this Step
 
 Can be run directly with the [bitrise CLI](https://github.com/bitrise-io/bitrise),
