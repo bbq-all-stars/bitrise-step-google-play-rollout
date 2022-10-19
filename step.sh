@@ -1,6 +1,15 @@
 #!/bin/bash
 set -ex
 
+account_id=${account_id:=""}
+app_id=${app_id:=""}
+track_name=${track_name:=""}
+user_email=${user_email:=""}
+password=${password:=""}
+ignore_warn=${ignore_warn:=""}
+screenshot_review=${screenshot_review:=""}
+totp_secret=${totp_secret:=""}
+
 SOURCE_DIR=$(pwd)
 STEP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -43,4 +52,4 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"
 
-cd $SOURCE_DIR
+cd "$SOURCE_DIR"
