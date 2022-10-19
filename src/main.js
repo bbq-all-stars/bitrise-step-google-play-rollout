@@ -15,6 +15,7 @@ const totp = require("totp-generator");
         .option('-w, --ignore-warn', 'Ignore warning')
         .option('-s, --screenshot-review', 'Take review screenshot')
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
+        .option('-c, --screenshot-size <char>', 'Screenshot size (e.g. 1920x1080)', '1920x1080')
         .option('-S, --totp-secret <char>', 'Two step verification secret');
     cmd.program.parse();
 
@@ -25,10 +26,16 @@ const totp = require("totp-generator");
         // NOTE: Can't log in to Google on headless mode.
         headless : false,
     }
+    const pageWidth = Number(options.screenshotSize.split('x')[0])
+    const pageHeight = Number(options.screenshotSize.split('x')[1])
 
     const browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.setViewport({
+        width: pageWidth,
+        height: pageHeight,
+    });
 
     const deployer = new Deployer(page, {
         ignoreWarn : options.ignoreWarn,
@@ -67,7 +74,6 @@ class Deployer {
                     await this.page.click('#identifierId', {clickCount: 3});
                 }
             }
-
         }
 
         {
@@ -168,10 +174,20 @@ class Deployer {
                 if (this.options.screenshotDir) {
                     filePath = this.options.screenshotDir + '/' + filePath
                 }
+
+                const bodyHandle = await this.page.$('body');
+                const { width, height } = await bodyHandle.boundingBox();
                 await this.page.screenshot({
                     path: filePath,
-                    fullPage: true,
+                    clip: {
+                        x: 0,
+                        y: 0,
+                        width,
+                        height
+                    },
                 });
+
+                await bodyHandle.dispose();
             }
 
             const selector = 'releases-review-page form-bottom-bar material-button[debug-id="rollout-button"] > button[type="submit"]';

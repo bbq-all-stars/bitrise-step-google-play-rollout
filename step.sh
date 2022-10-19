@@ -8,6 +8,7 @@ user_email=${user_email:=""}
 password=${password:=""}
 ignore_warn=${ignore_warn:=""}
 screenshot_review=${screenshot_review:=""}
+screenshot_size=${screenshot_size:=""}
 totp_secret=${totp_secret:=""}
 
 SOURCE_DIR=$(pwd)
@@ -48,6 +49,7 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   ${IGNORE_WARN_OPTION} \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
+  -c "${screenshot_size}" \
   -S "${totp_secret}")
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"

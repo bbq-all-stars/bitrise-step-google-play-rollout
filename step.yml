@@ -134,6 +134,12 @@ inputs:
       value_options:
         - "yes"
         - "no"
+  - screenshot_size: "1920x1080"
+    opts:
+      title: Screenshot size of release review
+      summary: Screenshot size of release review
+      description: |
+        Screenshot size of review. Input like "1920x1080"
 
 outputs:
   - GOOGLE_PLAY_SCREENSHOT_PATH:
