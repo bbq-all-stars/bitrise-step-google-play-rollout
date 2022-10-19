@@ -109,7 +109,7 @@ inputs:
         input deploy user password
       is_required: true
       is_sensitive: true
-  - two_step_verification_secret:
+  - totp_secret:
     opts:
       title: Two step verification secret
       summary: Two step verification secret

@@ -16,7 +16,7 @@ const totp = require("totp-generator");
         .option('-s, --screenshot-review', 'Take review screenshot')
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
         .option('-D, --debug', 'Debug mode')
-        .option('-S, --two-step-verification-secret <char>', 'Two step verification secret');
+        .option('-S, --totp-secret <char>', 'Two step verification secret');
     cmd.program.parse();
 
     const options = cmd.program.opts();
@@ -37,7 +37,7 @@ const totp = require("totp-generator");
         ignoreWarn : options.ignoreWarn,
         screenshotReview: options.screenshotReview,
         screenshotDir: options.screenshotDir,
-        secret: options.twoStepVerificationSecret
+        totpSecret: options.totpSecret
     });
     await deployer.login(options.email, options.password);
     const screenshotFilePath = await deployer.rollout();
@@ -81,10 +81,10 @@ class Deployer {
             await this.page.keyboard.press('Enter');
         }
 
-        if (this.options.secret){
+        if (this.options.totpSecret){
             await this.page.waitForSelector('#totpPin');
             await Deployer.delay(1000);
-            const token = totp(this.options.secret);
+            const token = totp(this.options.totpSecret);
             await this.page.type('input[type="tel"]', token);
             await Deployer.delay(200);
             await this.page.keyboard.press('Enter');

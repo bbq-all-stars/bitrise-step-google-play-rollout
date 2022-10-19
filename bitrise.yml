@@ -9,7 +9,7 @@ app:
   - TRACK_NAME: $TRACK_NAME
   - USER_EMAIL: $USER_EMAIL
   - PASSWORD: $PASSWORD
-  - TWO_STEP_VERIFICATION_SECRET: $TWO_STEP_VERIFICATION_SECRET
+  - TOTP_SECRET: $TOTP_SECRET
   - IGNORE_WARN: $IGNORE_WARN
   - SCREENSHOT_REVIEW: $SCREENSHOT_REVIEW
   - DEBUG: $DEBUG
@@ -43,7 +43,7 @@ workflows:
           - track_name: $TRACK_NAME
           - user_email: $USER_EMAIL
           - password: $PASSWORD
-          - two_step_verification_secret: $TWO_STEP_VERIFICATION_SECRET
+          - totp_secret: $TOTP_SECRET
           - ignore_warn: $IGNORE_WARN
           - screenshot_review: $SCREENSHOT_REVIEW
           - debug: $DEBUG
