@@ -2,6 +2,7 @@ const cmd = require('commander');
 const puppeteer = require('puppeteer-extra');
 const pluginStealth = require('puppeteer-extra-plugin-stealth');
 const totp = require("totp-generator");
+const fs = require("fs");
 
 (async () => {
     puppeteer.use(pluginStealth());
@@ -133,10 +134,11 @@ class Deployer {
             if (warning && !this.options.ignoreWarn) {
                 throw new Error(warning)
             }
-            process.env.GOOGLE_PLAY_WARNING_TEXT = warning
+            fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
 
             if (this.options.screenshotReview) {
-                process.env.GOOGLE_PLAY_SCREENSHOT_PATH = await this._takeScreenshot()
+                const filePath = await this._takeScreenshot()
+                fs.writeFileSync("/tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH", filePath);
             }
 
             const selector = 'releases-review-page form-bottom-bar material-button[debug-id="rollout-button"] > button[type="submit"]';
@@ -185,8 +187,8 @@ class Deployer {
             }
             const selector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text single-validation [debug-id="validation-description"]';
             const elements = document.querySelectorAll(selector)
-            const texts = elements.map((e) => e.textContent)
-            return texts.join("\n")
+            const texts = Array.from(elements).map(e => e.textContent)
+            return headerContent + ":\n" + texts.join("\n\n")
         })
     }
 
@@ -203,8 +205,8 @@ class Deployer {
             }
             const selector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text single-validation [debug-id="validation-description"]';
             const elements = document.querySelectorAll(selector)
-            const texts = elements.map((e) => e.textContent)
-            return texts.join("\n\n")
+            const texts = Array.from(elements).map(e => e.textContent)
+            return headerContent + ":\n" + texts.join("\n\n")
         })
     }
 

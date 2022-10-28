@@ -52,7 +52,7 @@ node ./src/main.js \
   -c "${screenshot_size}" \
   -S "${totp_secret}"
 
-envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"
-envman add --key GOOGLE_PLAY_WARNING_TEXT --value "$GOOGLE_PLAY_WARNING_TEXT"
+envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$(cat /tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH)"
+envman add --key GOOGLE_PLAY_WARNING_TEXT --value "$(cat /tmp/export_GOOGLE_PLAY_WARNING_TEXT)"
 
 cd "$SOURCE_DIR"
