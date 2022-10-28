@@ -124,70 +124,21 @@ class Deployer {
             await Deployer.delay(1000);
         }
 
-        let screenshotFilePath = "";
         {
             await Deployer.delay(1000);
 
-            const isError = await this.page.evaluate(function () {
-                const errorSelector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text strong';
-                const errorElement = document.querySelectorAll(errorSelector)
-                if (!errorElement.length) {
-                    return false
-                }
-                const errorContent = errorElement[0].textContent;
-                return /Errors?$/.test(errorContent);
-            })
-            if (isError) {
-                throw new Error('error exists')
+            const error = await this._checkError()
+            if (error) {
+                throw new Error(error)
             }
+            const warning = await this._checkWarning()
+            if (warning && !this.options.ignoreWarn) {
+                throw new Error(warning)
+            }
+            process.env.GOOGLE_PLAY_WARNING_TEXT = warning
 
-            if (!this.options.ignoreWarn) {
-                const isWarning = await this.page.evaluate(function () {
-                    const warningSelector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text strong';
-                    const warningElement = document.querySelectorAll(warningSelector)
-                    if (!warningElement.length) {
-                        return false
-                    }
-                    const warningContent = warningElement[0].textContent;
-                    return /Warnings?$/.test(warningContent);
-                })
-                if (isWarning) {
-                    throw new Error('warning exists')
-                }
-            }
-            let filePath = ''
             if (this.options.screenshotReview) {
-                const expansionButtons = await this.page.$$('.expansion-button')
-                for (const expansionButton of expansionButtons) {
-                    await expansionButton.click()
-                    await Deployer.delay(1000);
-                }
-
-                const today = new Date();
-                const y = today.getFullYear().toString();
-                const m = (today.getMonth() + 1).toString().padStart(2, "0");
-                const d = today.getDate().toString().padStart(2, "0");
-                const H = today.getHours().toString().padStart(2, "0");
-                const M = today.getMinutes().toString().padStart(2, "0");
-                const S = today.getSeconds().toString().padStart(2, "0");
-                filePath = y + m + d + H + M + S + '_review.png';
-                if (this.options.screenshotDir) {
-                    filePath = this.options.screenshotDir + '/' + filePath
-                }
-
-                const bodyHandle = await this.page.$('body');
-                const { width, height } = await bodyHandle.boundingBox();
-                await this.page.screenshot({
-                    path: filePath,
-                    clip: {
-                        x: 0,
-                        y: 0,
-                        width,
-                        height
-                    },
-                });
-
-                await bodyHandle.dispose();
+                process.env.GOOGLE_PLAY_SCREENSHOT_PATH = await this._takeScreenshot()
             }
 
             const selector = 'releases-review-page form-bottom-bar material-button[debug-id="rollout-button"] > button[type="submit"]';
@@ -223,8 +174,68 @@ class Deployer {
                 return buttonContent === 'Create new release';
             }, {}, selector);
         }
+    }
 
-        return screenshotFilePath
+    async _checkError() {
+        const isError = await this.page.evaluate(function () {
+            const errorSelector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text strong';
+            const errorElement = document.querySelectorAll(errorSelector)
+            if (!errorElement.length) {
+                return false
+            }
+            const errorContent = errorElement[0].textContent;
+            return /Errors?$/.test(errorContent);
+        })
+        return isError
+    }
+
+    async _checkWarning(){
+        const isWarning = await this.page.evaluate(function () {
+            const warningSelector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text strong';
+            const warningElement = document.querySelectorAll(warningSelector)
+            if (!warningElement.length) {
+                return false
+            }
+            const warningContent = warningElement[0].textContent;
+            return /Warnings?$/.test(warningContent);
+        })
+        return isWarning
+    }
+
+    async _takeScreenshot() {
+        const expansionButtons = await this.page.$$('.expansion-button')
+        for (const expansionButton of expansionButtons) {
+            await expansionButton.click()
+            await Deployer.delay(1000);
+        }
+
+        let filePath = ""
+        const today = new Date();
+        const y = today.getFullYear().toString();
+        const m = (today.getMonth() + 1).toString().padStart(2, "0");
+        const d = today.getDate().toString().padStart(2, "0");
+        const H = today.getHours().toString().padStart(2, "0");
+        const M = today.getMinutes().toString().padStart(2, "0");
+        const S = today.getSeconds().toString().padStart(2, "0");
+        filePath = y + m + d + H + M + S + '_review.png';
+        if (this.options.screenshotDir) {
+            filePath = this.options.screenshotDir + '/' + filePath
+        }
+
+        const bodyHandle = await this.page.$('body');
+        const {width, height} = await bodyHandle.boundingBox();
+        await this.page.screenshot({
+            path: filePath,
+            clip: {
+                x: 0,
+                y: 0,
+                width,
+                height
+            },
+        });
+
+        await bodyHandle.dispose();
+        return filePath
     }
 
     // NOTE: https://stackoverflow.com/a/46965281
