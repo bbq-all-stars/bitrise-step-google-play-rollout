@@ -40,7 +40,7 @@ if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
 fi
 
-GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
+node ./src/main.js \
   -i "${account_id}" \
   -a "${app_id}" \
   -t "${track_name}" \
@@ -50,8 +50,9 @@ GOOGLE_PLAY_SCREENSHOT_PATH=$(node ./src/main.js \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
   -c "${screenshot_size}" \
-  -S "${totp_secret}")
+  -S "${totp_secret}"
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$GOOGLE_PLAY_SCREENSHOT_PATH"
+envman add --key GOOGLE_PLAY_WARNING_TEXT --value "$GOOGLE_PLAY_WARNING_TEXT"
 
 cd "$SOURCE_DIR"

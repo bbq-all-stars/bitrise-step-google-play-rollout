@@ -44,9 +44,7 @@ const totp = require("totp-generator");
         totpSecret: options.totpSecret
     });
     await deployer.login(options.email, options.password);
-    const screenshotFilePath = await deployer.rollout();
-
-    console.log(screenshotFilePath)
+    await deployer.rollout();
 
     await browser.close();
 })();
@@ -162,8 +160,6 @@ class Deployer {
 
             await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
-
-            screenshotFilePath = filePath
         }
 
         {
@@ -177,29 +173,39 @@ class Deployer {
     }
 
     async _checkError() {
-        const isError = await this.page.evaluate(function () {
-            const errorSelector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text strong';
-            const errorElement = document.querySelectorAll(errorSelector)
-            if (!errorElement.length) {
+        return await this.page.evaluate(function () {
+            const headerSelector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text strong';
+            const header = document.querySelectorAll(headerSelector)
+            if (!header.length) {
                 return false
             }
-            const errorContent = errorElement[0].textContent;
-            return /Errors?$/.test(errorContent);
+            const headerContent = header[0].textContent;
+            if (!/Errors?$/.test(headerContent)) {
+                return false
+            }
+            const selector = 'releases-review-page validation-expandable[debug-id="errors-expandable"] status-text single-validation [debug-id="validation-description"]';
+            const elements = document.querySelectorAll(selector)
+            const texts = elements.map((e) => e.textContent)
+            return texts.join("\n")
         })
-        return isError
     }
 
     async _checkWarning(){
-        const isWarning = await this.page.evaluate(function () {
-            const warningSelector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text strong';
-            const warningElement = document.querySelectorAll(warningSelector)
-            if (!warningElement.length) {
+        return await this.page.evaluate(function () {
+            const headerSelector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text strong';
+            const header = document.querySelectorAll(headerSelector)
+            if (!header.length) {
                 return false
             }
-            const warningContent = warningElement[0].textContent;
-            return /Warnings?$/.test(warningContent);
+            const headerContent = header[0].textContent;
+            if (!/Warnings?$/.test(headerContent)) {
+                return false
+            }
+            const selector = 'releases-review-page validation-expandable[debug-id="warnings-expandable"] status-text single-validation [debug-id="validation-description"]';
+            const elements = document.querySelectorAll(selector)
+            const texts = elements.map((e) => e.textContent)
+            return texts.join("\n\n")
         })
-        return isWarning
     }
 
     async _takeScreenshot() {
