@@ -148,3 +148,9 @@ outputs:
       summary: Path of screenshot on review page
       description: |
         Path of screenshot on review page
+  - GOOGLE_PLAY_WARNING_TEXT:
+    opts:
+      title: "Warning text in a release review page"
+      summary: Warning text in a release review page
+      description: |
+        Warning text in a release review page
