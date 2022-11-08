@@ -17,7 +17,8 @@ const fs = require("fs");
         .option('-s, --screenshot-review', 'Take review screenshot')
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
         .option('-c, --screenshot-size <char>', 'Screenshot size (e.g. 1920x1080)', '1920x1080')
-        .option('-S, --totp-secret <char>', 'Two step verification secret');
+        .option('-S, --totp-secret <char>', 'Two step verification secret')
+        .option('-T, --timeout <number>', 'Timeout of Puppeteer');
     cmd.program.parse();
 
     const options = cmd.program.opts();
@@ -32,6 +33,11 @@ const fs = require("fs");
 
     const browser = await puppeteer.launch(puppeteerOptions);
     const page = await browser.newPage();
+    const timeout = Number(options.timeout)
+    if (timeout){
+        page.setDefaultTimeout(timeout)
+        page.setDefaultNavigationTimeout(timeout)
+    }
     await page.goto(url, { waitUntil: 'networkidle0' });
     await page.setViewport({
         width: pageWidth,
