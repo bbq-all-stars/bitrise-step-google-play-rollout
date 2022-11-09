@@ -140,6 +140,12 @@ inputs:
       summary: Screenshot size of release review
       description: |
         Screenshot size of review. Input like "1920x1080"
+  - timeout: 30000
+    opts:
+      title: Timeout of Puppeteer
+      summary: Timeout of Puppeteer
+      description: |
+        Timeout of Puppeteer (msec)
 
 outputs:
   - GOOGLE_PLAY_SCREENSHOT_PATH:

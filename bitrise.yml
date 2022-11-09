@@ -13,6 +13,7 @@ app:
   - IGNORE_WARN: $IGNORE_WARN
   - SCREENSHOT_REVIEW: $SCREENSHOT_REVIEW
   - SCREENSHOT_SIZE: $SCREENSHOT_SIZE
+  - TIMEOUT: $TIMEOUT
 
   # If you want to share this step into a StepLib
   - BITRISE_STEP_ID: google-play-rollout
@@ -40,6 +41,7 @@ workflows:
           - ignore_warn: $IGNORE_WARN
           - screenshot_review: $SCREENSHOT_REVIEW
           - screenshot_size: $SCREENSHOT_SIZE
+          - timeout: $TIMEOUT
     - script:
         inputs:
         - content: |

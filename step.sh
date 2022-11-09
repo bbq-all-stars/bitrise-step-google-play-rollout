@@ -10,6 +10,7 @@ ignore_warn=${ignore_warn:=""}
 screenshot_review=${screenshot_review:=""}
 screenshot_size=${screenshot_size:=""}
 totp_secret=${totp_secret:=""}
+timeout=${timeout:="30000"}
 
 SOURCE_DIR=$(pwd)
 STEP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -50,7 +51,8 @@ node ./src/main.js \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
   -c "${screenshot_size}" \
-  -S "${totp_secret}"
+  -S "${totp_secret}" \
+  -T "${timeout}"
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$(cat /tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH)"
 envman add --key GOOGLE_PLAY_WARNING_TEXT --value "$(cat /tmp/export_GOOGLE_PLAY_WARNING_TEXT)"
