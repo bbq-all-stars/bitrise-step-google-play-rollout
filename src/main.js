@@ -121,7 +121,7 @@ class Deployer {
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
                 const buttonContent = button.querySelector('div.button-content').textContent;
-                return buttonContent === 'Review release';
+                return buttonContent === 'Next';
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
@@ -157,10 +157,10 @@ class Deployer {
             await this.page.click(selector);
             await Deployer.delay(1000);
 
-            const rolloutButtonSelector = 'material-dialog footer material-button[debug-id="yes-button"] > button[type="submit"]';
+            const rolloutButtonSelector = 'material-dialog footer button[debug-id="yes-button"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
-                const buttonContent = button.querySelector('div.button-content').textContent;
+                const buttonContent = button.querySelector('span.yes-button-label').textContent;
                 return buttonContent === 'Rollout'
             }, {}, rolloutButtonSelector);
             await Deployer.delay(1000);
@@ -168,15 +168,6 @@ class Deployer {
 
             await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             await Deployer.delay(1000);
-        }
-
-        {
-            const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
-            await this.page.waitForFunction(function (selector) {
-                const button = document.querySelectorAll(selector)[0];
-                const buttonContent = button.querySelector('div.button-content').textContent;
-                return buttonContent === 'Create new release';
-            }, {}, selector);
         }
     }
 
