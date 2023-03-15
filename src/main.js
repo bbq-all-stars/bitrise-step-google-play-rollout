@@ -28,6 +28,7 @@ const fs = require("fs");
     const puppeteerOptions = {
         // NOTE: Can't log in to Google on headless mode.
         headless : false,
+        args: ['--no-sandbox'], // ref. https://github.com/puppeteer/puppeteer/issues/3698
     }
     const pageWidth = Number(options.screenshotSize.split('x')[0])
     const pageHeight = Number(options.screenshotSize.split('x')[1])

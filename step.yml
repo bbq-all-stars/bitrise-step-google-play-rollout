@@ -61,7 +61,10 @@ deps:
   apt_get:
   - name: curl
   - name: git
-
+  - name: xvfb
+  - name: x11-apps
+  - name: x11-xkb-utils
+  - name: libx11-xcb1
 
 toolkit:
   bash:
