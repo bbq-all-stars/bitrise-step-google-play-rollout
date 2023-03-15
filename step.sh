@@ -18,13 +18,6 @@ STEP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd $STEP_DIR
 
-if [ ! -d ".asdf" ]; then
-  git clone https://github.com/asdf-vm/asdf.git .asdf --branch v0.10.2
-  . .asdf/asdf.sh
-  asdf plugin add nodejs || :
-  asdf install nodejs
-fi
-
 npm install
 
 IGNORE_WARN_OPTION=""
