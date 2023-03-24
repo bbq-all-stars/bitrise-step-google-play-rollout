@@ -14,6 +14,7 @@ app:
   - SCREENSHOT_REVIEW: $SCREENSHOT_REVIEW
   - SCREENSHOT_SIZE: $SCREENSHOT_SIZE
   - TIMEOUT: $TIMEOUT
+  - DRY_RUN: $DRY_RUN
 
   # If you want to share this step into a StepLib
   - BITRISE_STEP_ID: google-play-rollout
@@ -42,6 +43,7 @@ workflows:
           - screenshot_review: $SCREENSHOT_REVIEW
           - screenshot_size: $SCREENSHOT_SIZE
           - timeout: $TIMEOUT
+          - dry_run: $DRY_RUN
     - script:
         inputs:
         - content: |

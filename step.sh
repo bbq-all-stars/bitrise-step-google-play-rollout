@@ -11,6 +11,7 @@ screenshot_review=${screenshot_review:=""}
 screenshot_size=${screenshot_size:=""}
 totp_secret=${totp_secret:=""}
 timeout=${timeout:="30000"}
+dry_run=${dry_run:=""}
 
 SOURCE_DIR=$(pwd)
 STEP_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -31,6 +32,11 @@ if [ "${ignore_warn}" = "yes" ]; then
   IGNORE_WARN_OPTION="-w"
 fi
 
+DRY_RUN_OPTION=""
+if [ "${dry_run}" = "yes" ]; then
+  DRY_RUN_OPTION="-D"
+fi
+
 SCREENSHOT_REVIEW=""
 if [ "${screenshot_review}" = "yes" ]; then
   SCREENSHOT_REVIEW="-s"
@@ -48,6 +54,7 @@ node ./src/main.js \
   -e "${user_email}" \
   -p "${password}" \
   ${IGNORE_WARN_OPTION} \
+  ${DRY_RUN_OPTION} \
   ${SCREENSHOT_REVIEW} \
   -d "${SCREENSHOT_DIR}" \
   -c "${screenshot_size}" \
