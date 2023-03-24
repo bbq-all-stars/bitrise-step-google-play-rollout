@@ -61,7 +61,10 @@ deps:
   apt_get:
   - name: curl
   - name: git
-
+  - name: xvfb
+  - name: x11-apps
+  - name: x11-xkb-utils
+  - name: libx11-xcb1
 
 toolkit:
   bash:
@@ -146,6 +149,15 @@ inputs:
       summary: Timeout of Puppeteer
       description: |
         Timeout of Puppeteer (msec)
+  - dry_run: "no"
+    opts:
+      title: dry run option
+      summary:  dry run option
+      description: |
+        If you want not to roll out an app, set "yes"
+      value_options:
+        - "yes"
+        - "no"
 
 outputs:
   - GOOGLE_PLAY_SCREENSHOT_PATH:

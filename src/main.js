@@ -18,7 +18,8 @@ const fs = require("fs");
         .option('-d, --screenshot-dir <char>', 'Screenshot dir')
         .option('-c, --screenshot-size <char>', 'Screenshot size (e.g. 1920x1080)', '1920x1080')
         .option('-S, --totp-secret <char>', 'Two step verification secret')
-        .option('-T, --timeout <number>', 'Timeout of Puppeteer');
+        .option('-T, --timeout <number>', 'Timeout of Puppeteer')
+        .option('-D, --dry-run', 'Dry run');
     cmd.program.parse();
 
     const options = cmd.program.opts();
@@ -27,6 +28,7 @@ const fs = require("fs");
     const puppeteerOptions = {
         // NOTE: Can't log in to Google on headless mode.
         headless : false,
+        args: ['--no-sandbox'], // ref. https://github.com/puppeteer/puppeteer/issues/3698
     }
     const pageWidth = Number(options.screenshotSize.split('x')[0])
     const pageHeight = Number(options.screenshotSize.split('x')[1])
@@ -48,7 +50,8 @@ const fs = require("fs");
         ignoreWarn : options.ignoreWarn,
         screenshotReview: options.screenshotReview,
         screenshotDir: options.screenshotDir,
-        totpSecret: options.totpSecret
+        totpSecret: options.totpSecret,
+        dryRun : options.dryRun
     });
     await deployer.login(options.email, options.password);
     await deployer.rollout();
@@ -164,9 +167,10 @@ class Deployer {
                 return buttonContent === 'Rollout'
             }, {}, rolloutButtonSelector);
             await Deployer.delay(1000);
-            await this.page.click(rolloutButtonSelector);
-
-            await this.page.waitForNavigation({waitUntil: 'networkidle0'});
+            if (!this.options.dryRun) {
+                await this.page.click(rolloutButtonSelector);
+                await this.page.waitForNavigation({waitUntil: 'networkidle0'});
+            }
             await Deployer.delay(1000);
         }
     }
