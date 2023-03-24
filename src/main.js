@@ -151,7 +151,7 @@ class Deployer {
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
                 const buttonContent = button.querySelector('div.button-content').textContent;
-                return buttonContent.startsWith('Start roll-out to')
+                return buttonContent.startsWith('Start rollout to')
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
