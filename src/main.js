@@ -150,27 +150,14 @@ class Deployer {
                 fs.writeFileSync("/tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH", filePath);
             }
 
-            const selector = 'releases-review-page form-bottom-bar material-button[debug-id="rollout-button"] > button[type="submit"]';
+            const selector = 'releases-review-page form-bottom-bar material-button[debug-id="main-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
                 const buttonContent = button.querySelector('div.button-content').textContent;
-                return buttonContent.startsWith('Start rollout to')
+                return buttonContent.startsWith('Save')
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
-            await Deployer.delay(1000);
-
-            const rolloutButtonSelector = 'material-dialog footer button[debug-id="yes-button"]';
-            await this.page.waitForFunction(function (selector) {
-                const button = document.querySelectorAll(selector)[0];
-                const buttonContent = button.querySelector('span.yes-button-label').textContent;
-                return buttonContent === 'Rollout'
-            }, {}, rolloutButtonSelector);
-            await Deployer.delay(1000);
-            if (!this.options.dryRun) {
-                await this.page.click(rolloutButtonSelector);
-                await this.page.waitForNavigation({waitUntil: 'networkidle0'});
-            }
             await Deployer.delay(1000);
         }
     }
