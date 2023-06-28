@@ -140,10 +140,12 @@ class Deployer {
                 throw new Error(error)
             }
             const warning = await this._checkWarning()
-            if (warning && !this.options.ignoreWarn) {
-                throw new Error(warning)
+            if (warning) {
+                if (!this.options.ignoreWarn) {
+                    throw new Error(warning)
+                }
+                fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
             }
-            fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
 
             if (this.options.screenshotReview) {
                 const filePath = await this._takeScreenshot()
