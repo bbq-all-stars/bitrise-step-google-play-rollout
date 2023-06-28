@@ -154,7 +154,7 @@ class Deployer {
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
                 const buttonContent = button.querySelector('div.button-content').textContent;
-                return buttonContent.startsWith('Save')
+                return buttonContent.startsWith('Save and publish')
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
