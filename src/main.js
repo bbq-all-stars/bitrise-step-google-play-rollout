@@ -67,6 +67,7 @@ class Deployer {
 
     // NOTE: Reference https://gist.github.com/Brandawg93/728a93e84ed7b66d8dd0af966cb20ecb#file-google_login-ts-L80
     async login(email, password){
+        console.log("1 ========================================")
         {
             await this.page.waitForSelector('#identifierId');
             let badInput = true;
@@ -84,6 +85,7 @@ class Deployer {
             }
         }
 
+        console.log("2 ========================================")
         {
             await this.page.waitForSelector('#password');
             await Deployer.delay(1000);
@@ -92,6 +94,7 @@ class Deployer {
             await this.page.keyboard.press('Enter');
         }
 
+        console.log("3 ========================================")
         if (this.options.totpSecret){
             await this.page.waitForSelector('#totpPin');
             await Deployer.delay(1000);
@@ -106,6 +109,7 @@ class Deployer {
     }
 
     async rollout(){
+        console.log("4 ========================================")
         {
             const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
@@ -119,6 +123,7 @@ class Deployer {
             await Deployer.delay(1000);
         }
 
+        console.log("5 ========================================")
         {
             const selector = 'app-releases-prepare-page form-bottom-bar material-button[debug-id="review-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
@@ -132,7 +137,9 @@ class Deployer {
             await Deployer.delay(1000);
         }
 
+        console.log("6 ========================================")
         {
+            console.log("6.1 ========================================")
             await Deployer.delay(1000);
 
             const error = await this._checkError()
@@ -147,11 +154,13 @@ class Deployer {
                 fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
             }
 
+            console.log("6.2 ========================================")
             if (this.options.screenshotReview) {
                 const filePath = await this._takeScreenshot()
                 fs.writeFileSync("/tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH", filePath);
             }
 
+            console.log("6.3 ========================================")
             const selector = 'releases-review-page form-bottom-bar material-button[debug-id="main-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -162,6 +171,7 @@ class Deployer {
             await this.page.click(selector);
             await Deployer.delay(1000);
 
+            console.log("6.4 ========================================")
             const rolloutButtonSelector = 'material-dialog footer button[debug-id="yes-button"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -170,9 +180,11 @@ class Deployer {
             }, {}, rolloutButtonSelector);
             await Deployer.delay(1000);
             if (!this.options.dryRun) {
+                console.log("6.5 ========================================")
                 await this.page.click(rolloutButtonSelector);
                 await this.page.waitForNavigation({waitUntil: 'networkidle0'});
             }
+            console.log("6.6 ========================================")
             await Deployer.delay(1000);
         }
     }
