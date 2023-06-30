@@ -24,11 +24,10 @@ const fs = require("fs");
 
     const options = cmd.program.opts();
     const url = 'https://play.google.com/console/u/0/developers/' + options.id + '/app/' + options.app + '/tracks/' + options.track;
-    console.log(url)
 
     const puppeteerOptions = {
         // NOTE: Can't log in to Google on headless mode.
-        headless : true,
+        headless : false,
         args: ['--no-sandbox'], // ref. https://github.com/puppeteer/puppeteer/issues/3698
     }
     const pageWidth = Number(options.screenshotSize.split('x')[0])
