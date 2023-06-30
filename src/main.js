@@ -72,6 +72,22 @@ class Deployer {
             await this.page.waitForSelector('#identifierId');
             let badInput = true;
 
+            // ===========================================
+            let filePath = this.options.screenshotDir + '/test.png'
+            const bodyHandle = await this.page.$('body');
+            const {width, height} = await bodyHandle.boundingBox();
+            await this.page.screenshot({
+                path: filePath,
+                clip: {
+                    x: 0,
+                    y: 0,
+                    width,
+                    height
+                },
+            });
+            await bodyHandle.dispose();
+            // ===========================================
+
             while (badInput) {
                 await this.page.type('#identifierId', email);
                 await Deployer.delay(1000);
