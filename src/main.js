@@ -42,8 +42,8 @@ const fs = require("fs");
     }
     await page.goto(url, { waitUntil: 'networkidle0' });
     await page.setViewport({
-        width: pageWidth,
-        height: pageHeight,
+        width: 1920,
+        height: 1080,
     });
 
     const deployer = new Deployer(page, {
@@ -70,7 +70,7 @@ class Deployer {
         console.log("1 ========================================")
         {
             // ===========================================
-            await Deployer.delay(5000);
+            await Deployer.delay(10000);
             let filePath = this.options.screenshotDir + '/test.png'
             const bodyHandle = await this.page.$('body');
             const {width, height} = await bodyHandle.boundingBox();
