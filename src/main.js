@@ -6,6 +6,14 @@ const fs = require("fs");
 
 (async () => {
     puppeteer.use(pluginStealth());
+    puppeteer.use(require('pteuppeteer-extra-plugin-anonymize-ua')())
+    puppeteer.use(require('puppeteer-extra-plugin-user-preferences')({userPrefs: {
+            webkit: {
+                webprefs: {
+                    default_font_size: 16
+                }
+            }
+        }}))
 
     cmd.program
         .option('-i, --id <char>', 'Google Play developer account ID')
@@ -28,7 +36,10 @@ const fs = require("fs");
     const puppeteerOptions = {
         // NOTE: Can't log in to Google on headless mode.
         headless : false,
-        args: ['--no-sandbox'], // ref. https://github.com/puppeteer/puppeteer/issues/3698
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+        ], // ref. https://github.com/puppeteer/puppeteer/issues/3698
     }
     const pageWidth = Number(options.screenshotSize.split('x')[0])
     const pageHeight = Number(options.screenshotSize.split('x')[1])
