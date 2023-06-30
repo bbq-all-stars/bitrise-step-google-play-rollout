@@ -73,17 +73,7 @@ class Deployer {
             // ===========================================
             await Deployer.delay(30000);
             let filePath = this.options.screenshotDir + '/test.png'
-            const bodyHandle = await this.page.$('body');
-            const {width, height} = await bodyHandle.boundingBox();
-            await this.page.screenshot({
-                path: filePath,
-                clip: {
-                    x: 0,
-                    y: 0,
-                    width,
-                    height
-                },
-            });
+            await this.page.screenshot({path: filePath});
             await bodyHandle.dispose();
             // ===========================================
 
