@@ -140,10 +140,12 @@ class Deployer {
                 throw new Error(error)
             }
             const warning = await this._checkWarning()
-            if (warning && !this.options.ignoreWarn) {
-                throw new Error(warning)
+            if (warning) {
+                if (!this.options.ignoreWarn) {
+                    throw new Error(warning)
+                }
+                fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
             }
-            fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
 
             if (this.options.screenshotReview) {
                 const filePath = await this._takeScreenshot()
@@ -158,6 +160,19 @@ class Deployer {
             }, {}, selector);
             await Deployer.delay(1000);
             await this.page.click(selector);
+            await Deployer.delay(1000);
+
+            const rolloutButtonSelector = 'material-dialog footer button[debug-id="yes-button"]';
+            await this.page.waitForFunction(function (selector) {
+                const button = document.querySelectorAll(selector)[0];
+                const buttonContent = button.querySelector('span.yes-button-label').textContent;
+                return buttonContent === 'Save and publish'
+            }, {}, rolloutButtonSelector);
+            await Deployer.delay(1000);
+            if (!this.options.dryRun) {
+                await this.page.click(rolloutButtonSelector);
+                await this.page.waitForNavigation({waitUntil: 'networkidle0'});
+            }
             await Deployer.delay(1000);
         }
     }
