@@ -40,11 +40,14 @@ const fs = require("fs");
         page.setDefaultTimeout(timeout)
         page.setDefaultNavigationTimeout(timeout)
     }
-    await page.goto(url, { waitUntil: 'networkidle0' });
+    await page.setExtraHTTPHeaders({
+        'accept-language': 'en-US,en;q=0.9,hy;q=0.8'
+    });
     await page.setViewport({
         width: 1920,
         height: 1080,
     });
+    await page.goto(url, { waitUntil: 'networkidle0' });
 
     const deployer = new Deployer(page, {
         ignoreWarn : options.ignoreWarn,
