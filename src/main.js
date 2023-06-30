@@ -24,6 +24,7 @@ const fs = require("fs");
 
     const options = cmd.program.opts();
     const url = 'https://play.google.com/console/u/0/developers/' + options.id + '/app/' + options.app + '/tracks/' + options.track;
+    console.log(url)
 
     const puppeteerOptions = {
         // NOTE: Can't log in to Google on headless mode.
@@ -70,7 +71,7 @@ class Deployer {
         console.log("1 ========================================")
         {
             // ===========================================
-            await Deployer.delay(10000);
+            await Deployer.delay(30000);
             let filePath = this.options.screenshotDir + '/test.png'
             const bodyHandle = await this.page.$('body');
             const {width, height} = await bodyHandle.boundingBox();
