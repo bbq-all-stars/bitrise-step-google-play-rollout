@@ -69,10 +69,8 @@ class Deployer {
     async login(email, password){
         console.log("1 ========================================")
         {
-            await this.page.waitForSelector('#identifierId');
-            let badInput = true;
-
             // ===========================================
+            await Deployer.delay(5000);
             let filePath = this.options.screenshotDir + '/test.png'
             const bodyHandle = await this.page.$('body');
             const {width, height} = await bodyHandle.boundingBox();
@@ -87,6 +85,9 @@ class Deployer {
             });
             await bodyHandle.dispose();
             // ===========================================
+
+            await this.page.waitForSelector('#identifierId');
+            let badInput = true;
 
             while (badInput) {
                 await this.page.type('#identifierId', email);
