@@ -6,7 +6,7 @@ const fs = require("fs");
 
 (async () => {
     puppeteer.use(pluginStealth());
-    puppeteer.use(require('pteuppeteer-extra-plugin-anonymize-ua')())
+    puppeteer.use(require('puppeteer-extra-plugin-anonymize-ua')())
     puppeteer.use(require('puppeteer-extra-plugin-user-preferences')({userPrefs: {
             webkit: {
                 webprefs: {
