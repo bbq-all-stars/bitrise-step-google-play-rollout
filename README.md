@@ -17,6 +17,10 @@ This step has some functions:
     * You can change an screenshot size.
 * You can choose a rollout track from "Open testing", "Closed testing" or "Internal testing".
 
+###### CAUTION:
+I don't know why, but this step does not work properly in the Linux stack.
+For some reason, Google login seems to fail.
+
 ## How to use this Step
 
 Can be run directly with the [bitrise CLI](https://github.com/bitrise-io/bitrise),
