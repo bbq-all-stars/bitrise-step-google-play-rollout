@@ -40,35 +40,48 @@ if [ ! -d "$SCREENSHOT_DIR" ]; then
   mkdir "$SCREENSHOT_DIR"
 fi
 
+retry() {
+    MAX_RETRY_COUNT=3
+    INTERVAL=5
+    i=0
+    while true; do
+      set +e
+      "$@"
+      if [ $? -eq 0 ]; then
+          break
+      fi
+      set -e
+
+      i=$((i + 1))
+      if [ $i -eq $MAX_RETRY_COUNT ]; then
+          echo "Error: command failed after $max_retry_count attempts"
+          exit 1
+      fi
+
+      sleep $INTERVAL
+    done
+}
+
+COMMAND=$(cat<<EOF
+node ./src/main.js \
+    -i "${account_id}" \
+    -a "${app_id}" \
+    -t "${track_name}" \
+    -e "${user_email}" \
+    -p "${password}" \
+    ${IGNORE_WARN_OPTION} \
+    ${DRY_RUN_OPTION} \
+    ${SCREENSHOT_REVIEW} \
+    -d "${SCREENSHOT_DIR}" \
+    -c "${screenshot_size}" \
+    -S "${totp_secret}" \
+    -T "${timeout}"
+EOF)
 
 if [ "$(uname)" = "Linux" ]; then
-    xvfb-run --auto-servernum node ./src/main.js \
-      -i "${account_id}" \
-      -a "${app_id}" \
-      -t "${track_name}" \
-      -e "${user_email}" \
-      -p "${password}" \
-      ${IGNORE_WARN_OPTION} \
-      ${DRY_RUN_OPTION} \
-      ${SCREENSHOT_REVIEW} \
-      -d "${SCREENSHOT_DIR}" \
-      -c "${screenshot_size}" \
-      -S "${totp_secret}" \
-      -T "${timeout}"
+    retry xvfb-run --auto-servernum "$COMMAND"
 else
-    node ./src/main.js \
-      -i "${account_id}" \
-      -a "${app_id}" \
-      -t "${track_name}" \
-      -e "${user_email}" \
-      -p "${password}" \
-      ${IGNORE_WARN_OPTION} \
-      ${DRY_RUN_OPTION} \
-      ${SCREENSHOT_REVIEW} \
-      -d "${SCREENSHOT_DIR}" \
-      -c "${screenshot_size}" \
-      -S "${totp_secret}" \
-      -T "${timeout}"
+    retry "$COMMAND"
 fi
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$(cat /tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH)"
