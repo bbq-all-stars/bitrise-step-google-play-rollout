@@ -11,6 +11,7 @@ screenshot_review=${screenshot_review:=""}
 screenshot_size=${screenshot_size:=""}
 totp_secret=${totp_secret:=""}
 timeout=${timeout:="30000"}
+retry=${retry:="3"}
 dry_run=${dry_run:=""}
 
 SOURCE_DIR=$(pwd)
@@ -41,7 +42,6 @@ if [ ! -d "$SCREENSHOT_DIR" ]; then
 fi
 
 retry() {
-    MAX_RETRY_COUNT=3
     INTERVAL=5
     i=0
     while true; do
@@ -53,7 +53,7 @@ retry() {
       set -e
 
       i=$((i + 1))
-      if [ $i -eq $MAX_RETRY_COUNT ]; then
+      if [ $i -eq $retry ]; then
           echo "Error: command failed after $max_retry_count attempts"
           exit 1
       fi

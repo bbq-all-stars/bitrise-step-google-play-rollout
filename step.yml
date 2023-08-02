@@ -149,6 +149,12 @@ inputs:
       summary: Timeout of Puppeteer
       description: |
         Timeout of Puppeteer (msec)
+  - retry: "3"
+    opts:
+      title: max retry count
+      summary: max retry count
+      description: |
+        Set max retry count
   - dry_run: "no"
     opts:
       title: dry run option
