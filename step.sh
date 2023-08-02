@@ -79,9 +79,9 @@ node ./src/main.js \
 EOF)
 
 if [ "$(uname)" = "Linux" ]; then
-    retry xvfb-run --auto-servernum "$COMMAND"
+    retry xvfb-run --auto-servernum $COMMAND
 else
-    retry "$COMMAND"
+    retry $COMMAND
 fi
 
 envman add --key GOOGLE_PLAY_SCREENSHOT_PATH --value "$(cat /tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH)"
