@@ -64,18 +64,18 @@ retry() {
 
 COMMAND=$(cat<<EOF
 node ./src/main.js \
-    -i "${account_id}" \
-    -a "${app_id}" \
-    -t "${track_name}" \
-    -e "${user_email}" \
-    -p "${password}" \
+    -i ${account_id} \
+    -a ${app_id} \
+    -t ${track_name} \
+    -e ${user_email} \
+    -p ${password} \
     ${IGNORE_WARN_OPTION} \
     ${DRY_RUN_OPTION} \
     ${SCREENSHOT_REVIEW} \
-    -d "${SCREENSHOT_DIR}" \
-    -c "${screenshot_size}" \
-    -S "${totp_secret}" \
-    -T "${timeout}"
+    -d ${SCREENSHOT_DIR} \
+    -c ${screenshot_size} \
+    -S ${totp_secret} \
+    -T ${timeout}
 EOF)
 
 if [ "$(uname)" = "Linux" ]; then
