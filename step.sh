@@ -46,7 +46,7 @@ retry() {
     i=0
     while true; do
       set +e
-      "$@"
+      $@
       if [ $? -eq 0 ]; then
           break
       fi
