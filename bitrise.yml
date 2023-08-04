@@ -14,6 +14,7 @@ app:
   - SCREENSHOT_REVIEW: $SCREENSHOT_REVIEW
   - SCREENSHOT_SIZE: $SCREENSHOT_SIZE
   - TIMEOUT: $TIMEOUT
+  - RETRY: $RETRY
   - DRY_RUN: $DRY_RUN
 
   # If you want to share this step into a StepLib
@@ -43,6 +44,7 @@ workflows:
           - screenshot_review: $SCREENSHOT_REVIEW
           - screenshot_size: $SCREENSHOT_SIZE
           - timeout: $TIMEOUT
+          - retry: $retry
           - dry_run: $DRY_RUN
     - script:
         inputs:
