@@ -67,7 +67,10 @@ class Deployer {
 
     // NOTE: Reference https://gist.github.com/Brandawg93/728a93e84ed7b66d8dd0af966cb20ecb#file-google_login-ts-L80
     async login(email, password){
+        console.log("=== start login =========================================")
         {
+            console.log("=== input id ============================================")
+
             await this.page.waitForSelector('#identifierId');
             let badInput = true;
 
@@ -85,6 +88,8 @@ class Deployer {
         }
 
         {
+            console.log("=== input password ======================================")
+
             await this.page.waitForSelector('#password');
             await Deployer.delay(1000);
             await this.page.type('input[type="password"]', password);
@@ -93,6 +98,8 @@ class Deployer {
         }
 
         if (this.options.totpSecret){
+            console.log("=== input totp ==========================================")
+
             await this.page.waitForSelector('#totpPin');
             await Deployer.delay(1000);
             const token = totp(this.options.totpSecret);
@@ -106,7 +113,10 @@ class Deployer {
     }
 
     async rollout(){
+        console.log("=== start rollout =======================================")
         {
+            console.log("=== edit release ========================================")
+
             const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -120,6 +130,8 @@ class Deployer {
         }
 
         {
+            console.log("=== view review page ====================================")
+
             const selector = 'app-releases-prepare-page form-bottom-bar material-button[debug-id="review-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -135,10 +147,13 @@ class Deployer {
         {
             await Deployer.delay(1000);
 
+            console.log("=== check errors ========================================")
             const error = await this._checkError()
             if (error) {
                 throw new Error(error)
             }
+
+            console.log("=== check warnings ======================================")
             const warning = await this._checkWarning()
             if (warning) {
                 if (!this.options.ignoreWarn) {
@@ -147,11 +162,13 @@ class Deployer {
                 fs.writeFileSync("/tmp/export_GOOGLE_PLAY_WARNING_TEXT", warning);
             }
 
+            console.log("=== take screenshot =====================================")
             if (this.options.screenshotReview) {
                 const filePath = await this._takeScreenshot()
                 fs.writeFileSync("/tmp/export_GOOGLE_PLAY_SCREENSHOT_PATH", filePath);
             }
 
+            console.log("=== show release confirm ================================")
             const selector = 'releases-review-page form-bottom-bar material-button[debug-id="main-button"] > button[type="submit"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
@@ -162,6 +179,7 @@ class Deployer {
             await this.page.click(selector);
             await Deployer.delay(1000);
 
+            console.log("=== release =============================================")
             const rolloutButtonSelector = 'material-dialog footer button[debug-id="yes-button"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
