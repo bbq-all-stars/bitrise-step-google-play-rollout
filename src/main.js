@@ -169,10 +169,10 @@ class Deployer {
             }
 
             console.log("=== show release confirm ================================")
-            const selector = 'releases-review-page form-bottom-bar material-button[debug-id="main-button"] > button[type="submit"]';
+            const selector = 'releases-review-page form-bottom-bar button[debug-id="main-button"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
-                const buttonContent = button.querySelector('div.button-content').textContent;
+                const buttonContent = button.querySelector('span.mdc-button__label').textContent;
                 return buttonContent.startsWith('Save and publish')
             }, {}, selector);
             await Deployer.delay(1000);
