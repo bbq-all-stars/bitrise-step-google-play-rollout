@@ -117,10 +117,10 @@ class Deployer {
         {
             console.log("=== edit release ========================================")
 
-            const selector = 'track-page track-page-header console-header material-button[debug-id="header-button"] > button[type="submit"]';
+            const selector = 'track-page track-page-header console-header button[debug-id="header-button"]';
             await this.page.waitForFunction(function (selector) {
                 const button = document.querySelectorAll(selector)[0];
-                const buttonContent = button.querySelector('div.button-content').textContent;
+                const buttonContent = button.querySelector('span.mdc-button__label').textContent;
                 return buttonContent === 'Edit release';
             }, {}, selector);
             await Deployer.delay(1000);
