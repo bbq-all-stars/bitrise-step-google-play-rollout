@@ -1,8 +1,8 @@
 {
   "name": "bitrise-step-google-play-rollout",
   "dependencies": {
-    "commander": "^11.0.0",
-    "puppeteer": "^20.7.4",
+    "commander": "^12.0.0",
+    "puppeteer": "^22.2.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
     "totp-generator": "^0.0.14"
